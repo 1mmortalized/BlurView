@@ -23,7 +23,7 @@ public class BlurView extends FrameLayout {
 
     private static final String TAG = BlurView.class.getSimpleName();
 
-    BlurController blurController = new NoOpController();
+    public BlurController blurController = new NoOpController();
 
     @ColorInt
     private int overlayColor;
