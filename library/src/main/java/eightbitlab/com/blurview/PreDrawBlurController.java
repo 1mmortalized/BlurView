@@ -154,6 +154,13 @@ public final class PreDrawBlurController implements BlurController {
             return false;
         }
 
+        // RenderScriptBlur doesn't blur internalBitmap, so after reopening the app,
+        // if auto-update is disabled, a non-blurred bitmap gets drawn without further blur update
+        // This code solves the issue by manual blurring before drawing
+        if (blurAlgorithm instanceof RenderEffectBlur) {
+            blurAndSave();
+        }
+
         // https://github.com/Dimezis/BlurView/issues/128
         float scaleFactorH = (float) blurView.getHeight() / internalBitmap.getHeight();
         float scaleFactorW = (float) blurView.getWidth() / internalBitmap.getWidth();
