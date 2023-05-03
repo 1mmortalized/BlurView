@@ -40,18 +40,6 @@ public final class PreDrawBlurController implements BlurController {
     private final int[] rootLocation = new int[2];
     private final int[] blurViewLocation = new int[2];
 
-    private final ViewTreeObserver.OnPreDrawListener drawListener = new ViewTreeObserver.OnPreDrawListener() {
-        @Override
-        public boolean onPreDraw() {
-            // Not invalidating a View here, just updating the Bitmap.
-            // This relies on the HW accelerated bitmap drawing behavior in Android
-            // If the bitmap was drawn on HW accelerated canvas, it holds a reference to it and on next
-            // drawing pass the updated content of the bitmap will be rendered on the screen
-            updateBlur();
-            return true;
-        }
-    };
-
     private boolean blurEnabled = true;
     private boolean initialized;
 
@@ -82,7 +70,6 @@ public final class PreDrawBlurController implements BlurController {
 
     @SuppressWarnings("WeakerAccess")
     void init(int measuredWidth, int measuredHeight) {
-        setBlurAutoUpdate(true);
         SizeScaler sizeScaler = new SizeScaler(blurAlgorithm.scaleFactor());
         if (sizeScaler.isZeroSized(measuredWidth, measuredHeight)) {
             // Will be initialized later when the View reports a size change
@@ -192,7 +179,6 @@ public final class PreDrawBlurController implements BlurController {
 
     @Override
     public void destroy() {
-        setBlurAutoUpdate(false);
         blurAlgorithm.destroy();
         initialized = false;
     }
@@ -212,16 +198,7 @@ public final class PreDrawBlurController implements BlurController {
     @Override
     public BlurViewFacade setBlurEnabled(boolean enabled) {
         this.blurEnabled = enabled;
-        setBlurAutoUpdate(enabled);
         blurView.invalidate();
-        return this;
-    }
-
-    public BlurViewFacade setBlurAutoUpdate(final boolean enabled) {
-        rootView.getViewTreeObserver().removeOnPreDrawListener(drawListener);
-        if (enabled) {
-            rootView.getViewTreeObserver().addOnPreDrawListener(drawListener);
-        }
         return this;
     }
 

@@ -16,14 +16,6 @@ public interface BlurViewFacade {
     BlurViewFacade setBlurEnabled(boolean enabled);
 
     /**
-     * Can be used to stop blur auto update or resume if it was stopped before.
-     * Enabled by default.
-     *
-     * @return {@link BlurViewFacade}
-     */
-    BlurViewFacade setBlurAutoUpdate(boolean enabled);
-
-    /**
      * @param frameClearDrawable sets the drawable to draw before view hierarchy.
      *                           Can be used to draw Activity's window background if your root layout doesn't provide any background
      *                           Optional, by default frame is cleared with a transparent color.

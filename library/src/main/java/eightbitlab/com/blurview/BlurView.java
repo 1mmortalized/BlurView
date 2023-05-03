@@ -7,7 +7,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -20,9 +19,6 @@ import androidx.annotation.RequiresApi;
  * Can have children and draw them over blurred background.
  */
 public class BlurView extends FrameLayout {
-
-    private static final String TAG = BlurView.class.getSimpleName();
-
     public BlurController blurController = new NoOpController();
 
     @ColorInt
@@ -61,22 +57,6 @@ public class BlurView extends FrameLayout {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         blurController.updateBlurViewSize();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        blurController.setBlurAutoUpdate(false);
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        if (!isHardwareAccelerated()) {
-            Log.e(TAG, "BlurView can't be used in not hardware-accelerated window!");
-        } else {
-            blurController.setBlurAutoUpdate(true);
-        }
     }
 
     /**
@@ -123,13 +103,6 @@ public class BlurView extends FrameLayout {
     public BlurViewFacade setOverlayColor(@ColorInt int overlayColor) {
         this.overlayColor = overlayColor;
         return blurController.setOverlayColor(overlayColor);
-    }
-
-    /**
-     * @see BlurViewFacade#setBlurAutoUpdate(boolean)
-     */
-    public BlurViewFacade setBlurAutoUpdate(boolean enabled) {
-        return blurController.setBlurAutoUpdate(enabled);
     }
 
     /**
